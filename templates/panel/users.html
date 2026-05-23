@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}User Management - IPTV Management Panel{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">User Management</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{{ url_for('panel_add_user') }}" class="btn btn-sm btn-primary">
+                <i class="fas fa-plus me-1"></i>Add User
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- View Toggle Buttons -->
+<div class="mb-3">
+    <div class="btn-group" role="group">
+        <a href="{{ url_for('panel_users', view='list') }}" class="btn btn-outline-primary {% if view_mode == 'list' %}active{% endif %}">
+            <i class="fas fa-list me-1"></i>List View
+        </a>
+        <a href="{{ url_for('panel_users', view='tree') }}" class="btn btn-outline-primary {% if view_mode == 'tree' %}active{% endif %}">
+            <i class="fas fa-sitemap me-1"></i>Tree View
+        </a>
+    </div>
+</div>
+
+{% if view_mode == 'tree' %}
+<!-- Tree View -->
+<div class="card shadow">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">User Hierarchy{% if current_user.role == 'rootadmin' %} <span class="text-muted fw-normal">(full tree — you at the root)</span>{% endif %}</h6>
+    </div>
+    <div class="card-body">
+        {% if tree_html %}
+        <div class="tree-container">
+            {{ tree_html|safe }}
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <i class="fas fa-sitemap fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No hierarchy to display</h5>
+            <p class="text-muted">You don't have any users in your hierarchy.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.tree-container {
+    font-family: monospace;
+    padding: 20px;
+}
+
+.tree-node {
+    margin: 5px 0;
+}
+
+.tree-children {
+    margin-left: 30px;
+    border-left: 2px solid #e3e6f0;
+    padding-left: 15px;
+}
+
+.user {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #f8f9fc;
+    border: 1px solid #e3e6f0;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.role {
+    font-size: 0.8em;
+    color: #858796;
+    font-weight: normal;
+}
+
+.tree-children .tree-node:before {
+    content: "├── ";
+    color: #858796;
+    margin-right: 5px;
+}
+
+.tree-children .tree-node:last-child:before {
+    content: "└── ";
+}
+</style>
+
+{% else %}
+<!-- List View -->
+<div class="card shadow">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+    </div>
+    <div class="card-body">
+        {% if users %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Parent</th>
+                        <th>Credits</th>
+                        <th>Last Login</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>
+                            <strong>{{ user.username }}</strong>
+                            {% if user.role == 'rootadmin' %}
+                                <span class="badge bg-danger ms-1">Root Admin</span>
+                            {% elif user.role == 'admin' %}
+                                <span class="badge bg-warning ms-1">Admin</span>
+                            {% elif user.role == 'reseller' %}
+                                <span class="badge bg-info ms-1">Reseller</span>
+                            {% else %}
+                                <span class="badge bg-secondary ms-1">Customer</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.role.title() }}</td>
+                        <td>
+                            {% if user.parent %}
+                                <span class="text-info">{{ user.parent.username }}</span>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.credits == 0 and user.role in ['rootadmin', 'admin'] %}
+                                <span class="text-success">Infinite</span>
+                            {% else %}
+                                {{ user.credits }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.last_login %}
+                                {{ user.last_login.strftime('%Y-%m-%d %H:%M') }}
+                            {% else %}
+                                <span class="text-muted">Never</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.created_at %}
+                                {{ user.created_at.strftime('%Y-%m-%d') }}
+                            {% else %}
+                                <span class="text-muted">Unknown</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{{ url_for('panel_view_user', username=user.username) }}" class="btn btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ url_for('panel_edit_user', username=user.username) }}" class="btn btn-outline-success">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% if user.role != 'rootadmin' or current_user.role == 'rootadmin' %}
+                                <form method="POST" action="{{ url_for('panel_delete_user', username=user.username) }}" style="display: inline;">
+                                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete user \'{{ user.username }}\'? This action cannot be undone.')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No users found</h5>
+            <p class="text-muted">Start by adding your first user.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %} 

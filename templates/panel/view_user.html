@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}User Details - IPTV Management Panel{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">User Details: {{ user.username }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{{ url_for('panel_users') }}" class="btn btn-sm btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Back to Users
+            </a>
+            <a href="{{ url_for('panel_edit_user', username=user.username) }}" class="btn btn-sm btn-primary">
+                <i class="fas fa-edit me-1"></i>Edit User
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Basic Information -->
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Basic Information</h6>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr>
+                        <td><strong>Username:</strong></td>
+                        <td>{{ user.username }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Role:</strong></td>
+                        <td>
+                            {% if user.role == 'rootadmin' %}
+                                <span class="badge bg-danger">Root Admin</span>
+                            {% elif user.role == 'admin' %}
+                                <span class="badge bg-warning">Admin</span>
+                            {% elif user.role == 'reseller' %}
+                                <span class="badge bg-info">Reseller</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Customer</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Credits:</strong></td>
+                        <td>
+                            {% if user.credits == 0 and user.role in ['rootadmin', 'admin'] %}
+                                <span class="text-success">Infinite</span>
+                            {% else %}
+                                {{ user.credits }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Created:</strong></td>
+                        <td>{{ user.created_at.strftime('%Y-%m-%d %H:%M') if user.created_at else 'Unknown' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Last Login:</strong></td>
+                        <td>{{ user.last_login.strftime('%Y-%m-%d %H:%M') if user.last_login else 'Never' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Parent:</strong></td>
+                        <td>
+                            {% if user.parent %}
+                                <span class="text-info">{{ user.parent.username }}</span>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Credit Activity -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Recent Credit Activity ({{ user.credit_logs|length }})</h6>
+            </div>
+            <div class="card-body">
+                {% if user.credit_logs %}
+                <div class="table-responsive" style="max-height: 400px;">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>Amount</th>
+                                <th>Before</th>
+                                <th>After</th>
+                                <th>By</th>
+                                <th>Date</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in user.credit_logs %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-{% if 'ADD' in log.action_type %}success{% elif 'CONSUME' in log.action_type %}warning{% elif 'TRANSFER' in log.action_type %}info{% else %}secondary{% endif %}">
+                                        {{ log.action_type }}
+                                    </span>
+                                </td>
+                                <td>{{ '+' if log.credits_amount > 0 else '' }}{{ log.credits_amount }}</td>
+                                <td>{{ log.credits_before }}</td>
+                                <td>{{ log.credits_after }}</td>
+                                <td>{{ log.performed_by }}</td>
+                                <td>{{ log.created_at.strftime('%Y-%m-%d %H:%M') if log.created_at else 'Unknown' }}</td>
+                                <td>{{ log.notes or '' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No credit activity recorded</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

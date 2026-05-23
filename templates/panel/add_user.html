@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Add User - IPTV Management Panel{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Add New User</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{{ url_for('panel_users') }}" class="btn btn-sm btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Back to Users
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Create New User Account</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username *</label>
+                                <input type="text" class="form-control" id="username" name="username" required maxlength="80">
+                                <div class="form-text">Username must be unique and cannot be changed later.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password *</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                                <div class="form-text">Choose a strong password for the user.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Role *</label>
+                                <select class="form-select" id="role" name="role" required>
+                                    {% if current_user.role == 'rootadmin' %}
+                                    <option value="admin">Admin</option>
+                                    <option value="reseller">Reseller</option>
+                                    <option value="customer">Customer</option>
+                                    {% elif current_user.role == 'admin' %}
+                                    <option value="reseller">Reseller</option>
+                                    <option value="customer">Customer</option>
+                                    {% elif current_user.role == 'reseller' %}
+                                    <option value="reseller">Reseller</option>
+                                    <option value="customer">Customer</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="credits" class="form-label">Initial Credits</label>
+                                <input type="number" class="form-control" id="credits" name="credits" value="0" min="0">
+                                <div class="form-text">Starting credit balance for the user.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('panel_users') }}" class="btn btn-secondary">
+                            <i class="fas fa-times me-1"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus me-1"></i>Create User
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

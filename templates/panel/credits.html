@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}Credit Management - IPTV Management Panel{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Credit Management</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="location.reload()">
+                <i class="fas fa-sync-alt me-1"></i>Refresh
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Your Credits Status -->
+<div class="row mb-4">
+    <div class="col-lg-6">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Your Available Credits
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ current_user.credits }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-coins fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Total Customers
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ users|length }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Credit Extension Form -->
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Extend Credits to Customer</h6>
+            </div>
+            <div class="card-body">
+                <form id="extendCreditsForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">Customer Username</label>
+                            <select class="form-select" id="username" name="username" required>
+                                <option value="">Select a customer...</option>
+                                {% for user in users %}
+                                <option value="{{ user.username }}" data-credits="{{ user.credits }}">
+                                    {{ user.username }} ({{ user.credits }} credits)
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="credits" class="form-label">Credits to Add</label>
+                            <input type="number" class="form-control" id="credits" name="credits" min="1" required>
+                            <div class="form-text">How many credits to add to this customer's account</div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes (Optional)</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="2" placeholder="e.g., Monthly subscription renewal"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Extend Credits
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Quick Info</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6>How it works:</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Credits are deducted from your account</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Credits are added to customer's account</li>
+                        <li><i class="fas fa-check text-success me-2"></i>All transactions are logged</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Customers can use credits for streaming</li>
+                    </ul>
+                </div>
+                <div class="alert alert-info">
+                    <small>
+                        <i class="fas fa-info-circle me-1"></i>
+                        <strong>Note:</strong> Root admin and Admin accounts have unlimited credits and won't be charged.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Customer Credits Table -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Customer Credits Overview</h6>
+            </div>
+            <div class="card-body">
+                {% if users %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Current Credits</th>
+                                <th>Last Login</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>
+                                    <span class="badge bg-{{ 'primary' if user.role == 'reseller' else 'secondary' }}">
+                                        {{ user.role.title() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if user.credits > 0 else 'warning' }}">
+                                        {{ user.credits }} credits
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if user.last_login %}
+                                        {{ user.last_login.strftime('%Y-%m-%d %H:%M') }}
+                                    {% else %}
+                                        <span class="text-muted">Never</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="quickExtend('{{ user.username }}')">
+                                        <i class="fas fa-plus me-1"></i>Quick Add
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No Customers Found</h5>
+                    <p class="text-muted">You don't have any customers to manage credits for.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success/Error Messages -->
+<div id="alertContainer"></div>
+
+<script>
+function quickExtend(username) {
+    document.getElementById('username').value = username;
+    document.getElementById('credits').focus();
+}
+
+document.getElementById('extendCreditsForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {
+        username: formData.get('username'),
+        credits: parseInt(formData.get('credits')),
+        notes: formData.get('notes') || `Credits extended by ${formData.get('username')}`
+    };
+    
+    fetch('/extend-credits', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            showAlert('success', `Successfully extended ${data.credits} credits to ${data.username}`);
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showAlert('danger', `Error: ${result.message}`);
+        }
+    })
+    .catch(error => {
+        showAlert('danger', 'Network error occurred');
+        console.error('Error:', error);
+    });
+});
+
+function showAlert(type, message) {
+    const alertContainer = document.getElementById('alertContainer');
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type} alert-dismissible fade show`;
+    alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    alertContainer.appendChild(alert);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (alert.parentNode) {
+            alert.remove();
+        }
+    }, 5000);
+}
+</script>
+{% endblock %} 

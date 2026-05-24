@@ -98,6 +98,6 @@ cd proxy-gateway; $env:PORT="5002"; $env:UPSTREAM_API_BASE="http://127.0.0.1:500
 
 See `proxy-gateway/DEPLOYMENT.md`.
 
-## GitHub
+## Writing
 
-https://github.com/Shawns0826/reverse-proxy-demonstration-with-rbac-admin-panel
+[Security writing & case studies](https://shawns0826.github.io/Projects/)

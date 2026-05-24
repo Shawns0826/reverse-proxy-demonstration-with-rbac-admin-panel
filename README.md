@@ -17,6 +17,12 @@ Monorepo for a two-server lab (upstream + proxy/RBAC) and two Android TV clients
 
 Shared pool credentials for upstream auth (see `proxy-gateway/integrations.py`): `username1234` / `password1234`.
 
+## Demo video
+
+<video src="docs/demo/demo.mp4" controls width="100%">
+  <a href="docs/demo/demo.mp4">Download demo video</a>
+</video>
+
 ## Quick Start
 
 1. Start backend services:
@@ -78,6 +84,7 @@ cd proxy-gateway; $env:PORT="5002"; $env:UPSTREAM_API_BASE="http://127.0.0.1:500
 ## Repository layout
 
 ```text
+├── docs/demo/demo.mp4    Demo video (you add this file)
 ├── docker-compose.yml
 ├── upstream-service/     Mock provider API
 ├── proxy-gateway/        Reverse proxy + RBAC admin panel

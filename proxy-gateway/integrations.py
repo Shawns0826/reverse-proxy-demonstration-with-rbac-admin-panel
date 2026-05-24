@@ -29,11 +29,10 @@ _RESP_HEADERS_DROP = frozenset({
 })
 
 # ---------------------------------------------------------------------------
-# Upstream API — edit here (not read from environment; see DEPLOYMENT.md §3).
-# Local mock: this app listens on PORT (default 5001); upstream API on another port (e.g. 5002)
-# so proxied /api/* traffic is not forwarded back into this same process.
+# Upstream API — override with UPSTREAM_API_BASE (Docker Compose sets this).
+# Host dev: upstream :5001, proxy :5002. In Compose, use http://upstream-service:5001.
 # ---------------------------------------------------------------------------
-UPSTREAM_API_BASE = "http://127.0.0.1:5002"
+UPSTREAM_API_BASE = (os.environ.get("UPSTREAM_API_BASE") or "http://127.0.0.1:5001").strip().rstrip("/")
 # Optional full URL overrides; leave empty to derive from UPSTREAM_API_BASE.
 UPSTREAM_AUTH_URL = ""
 UPSTREAM_VALIDE_URL = ""

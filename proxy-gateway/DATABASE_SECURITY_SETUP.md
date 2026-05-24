@@ -77,8 +77,8 @@ DB_SLOW_QUERY_THRESHOLD=1.0
 
 #### Application Configuration
 ```bash
-# Application name for database monitoring (default: flask-login-app)
-APP_NAME=flask-login-app
+# Application name for database monitoring (default: proxy-gateway)
+APP_NAME=proxy-gateway
 ```
 
 ## 🚀 Setting Up Environment Variables
@@ -92,7 +92,7 @@ DB_MAX_OVERFLOW=10
 DB_SSL_MODE=prefer
 DB_STATEMENT_TIMEOUT=30000
 DB_SLOW_QUERY_THRESHOLD=0.5
-APP_NAME=flask-login-app-dev
+APP_NAME=proxy-gateway-dev
 ```
 
 ### For Production (Render)
@@ -119,7 +119,7 @@ DB_IDLE_TIMEOUT=60000
 DB_SLOW_QUERY_THRESHOLD=2.0
 
 # Application
-APP_NAME=flask-login-app-prod
+APP_NAME=proxy-gateway-prod
 ```
 
 ## 🧪 Verifying Database Security
@@ -223,7 +223,7 @@ DB_IDLE_TIMEOUT=60000
 DB_SLOW_QUERY_THRESHOLD=2.0
 
 # Application
-APP_NAME=flask-login-app-prod
+APP_NAME=proxy-gateway-prod
 ```
 
 ## 🔄 Next Steps

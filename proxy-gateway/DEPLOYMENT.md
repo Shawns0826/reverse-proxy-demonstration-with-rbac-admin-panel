@@ -11,7 +11,7 @@ Plain text sections; open with any editor (`less DEPLOYMENT.md`, `nano`, VS Code
 - **pip** and a virtual environment (recommended):
 
 ```bash
-cd /path/to/flask-login-app
+cd /path/to/reverse-proxy-demonstration-with-rbac-admin-panel
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt

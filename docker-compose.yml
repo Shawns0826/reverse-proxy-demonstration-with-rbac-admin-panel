@@ -1,0 +1,23 @@
+services:
+  upstream-service:
+    build: ./upstream-service
+    ports:
+      - "5001:5001"
+    environment:
+      PORT: "5001"
+
+  proxy-gateway:
+    build: ./proxy-gateway
+    ports:
+      - "5002:5002"
+    environment:
+      PORT: "5002"
+      FLASK_ENV: development
+      UPSTREAM_API_BASE: http://upstream-service:5001
+    depends_on:
+      - upstream-service
+    volumes:
+      - proxy_gateway_data:/app/instance
+
+volumes:
+  proxy_gateway_data:

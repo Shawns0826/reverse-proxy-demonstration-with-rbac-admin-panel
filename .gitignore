@@ -129,4 +129,24 @@ Thumbs.db
 *.log
 
 # Instance folder
-instance/ 
+instance/
+
+# Android clients / IDE
+.idea/
+*.iml
+local.properties
+.gradle/
+.kotlin/
+**/build/
+*.apk
+*.ap_
+*.dex
+
+# Upstream mock runtime DB
+upstream-service/sessions.db
+
+# Legacy paths (remove after cleanup)
+servers/
+clients/
+scripts/
+run.py

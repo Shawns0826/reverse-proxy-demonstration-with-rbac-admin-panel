@@ -132,7 +132,7 @@ class DatabaseSecurityManager:
             cursor = dbapi_connection.cursor()
 
             # Set application name for monitoring (only for our app)
-            app_name = os.environ.get('APP_NAME', 'flask-login-app')
+            app_name = os.environ.get('APP_NAME', 'proxy-gateway')
             cursor.execute(f"SET application_name = '{app_name}'")
 
             # Don't set aggressive timeouts that interfere with pgAdmin

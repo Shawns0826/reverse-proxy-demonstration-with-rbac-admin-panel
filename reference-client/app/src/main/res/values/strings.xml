@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">vulnerable-app</string>
+    <!-- Genymotion: host PC is 10.0.3.2 (not localhost — that is the VM). Official AVD: use 10.0.2.2. Physical device: PC LAN IP, e.g. http://192.168.1.10:5001 -->
+    <string name="api_base_url">http://10.0.2.2:5001</string>
+    <string name="login_title">Sign in</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="login_failed">Login failed</string>
+    <string name="device_conflict_ok">OK</string>
+    <string name="device_conflict_default_message">This account is active on another device.</string>
+    <string name="token_expired_detach_prompt">Your session is no longer valid. Sign out the other device? You will need to log in again to get a new session.</string>
+    <string name="browse_title">Videos by Your Company</string>
+    <string name="related_movies">Related Videos</string>
+    <string name="grid_view">Grid View</string>
+    <string name="error_fragment">Error Fragment</string>
+    <string name="personal_settings">Personal Settings</string>
+    <string name="watch_trailer_1">Watch trailer</string>
+    <string name="watch_trailer_2">FREE</string>
+    <string name="rent_1">Rent By Day</string>
+    <string name="rent_2">From $1.99</string>
+    <string name="buy_1">Buy and Own</string>
+    <string name="buy_2">AT $9.99</string>
+    <string name="movie">Movie</string>
+
+    <!-- Error messages -->
+    <string name="error_fragment_message">An error occurred</string>
+    <string name="dismiss_error">Dismiss</string>
+</resources>

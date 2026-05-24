@@ -1,14 +1,11 @@
 # Demo video
 
-Drop your screen recording here as:
+The recording lives at **`demo.mp4`** in this folder.
 
-**`demo.mp4`** (preferred)
+- **On GitHub:** use the [Watch the walkthrough](https://github.com/Shawns0826/reverse-proxy-demonstration-with-rbac-admin-panel/raw/main/docs/demo/demo.mp4) link in the root [README.md](../../README.md), or open [demo.mp4](demo.mp4) in the repo browser.
+- **Local clone:** double-click `demo.mp4` or open it in VLC / your OS video player.
 
-or **`demo.webm`**
+Tips for future recordings:
 
-After you add the file, tell your editor or run `git add docs/demo/demo.mp4` and push. The root [README.md](../../README.md) embeds `docs/demo/demo.mp4`.
-
-Tips:
-
-- Keep the file under ~25 MB if possible so clones stay fast (compress in HandBrake or similar).
-- Use H.264 MP4 for the widest browser/GitHub compatibility.
+- Aim for under ~50 MB when possible (HandBrake or similar) so clones stay fast.
+- Use H.264 MP4 for broad compatibility.

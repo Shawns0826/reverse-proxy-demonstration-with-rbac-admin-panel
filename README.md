@@ -19,9 +19,11 @@ Shared pool credentials for upstream auth (see `proxy-gateway/integrations.py`):
 
 ## Demo video
 
-<video src="docs/demo/demo.mp4" controls width="100%">
-  <a href="docs/demo/demo.mp4">Download demo video</a>
-</video>
+**[Watch the walkthrough](https://github.com/Shawns0826/reverse-proxy-demonstration-with-rbac-admin-panel/raw/main/docs/demo/demo.mp4)** (~100 MB; opens in your browser)
+
+Also in the repo: [docs/demo/demo.mp4](docs/demo/demo.mp4) (GitHub file view with player)
+
+If you cloned locally, open `docs/demo/demo.mp4` in your file explorer — IDE Markdown previews usually cannot play video.
 
 ## Quick Start
 
